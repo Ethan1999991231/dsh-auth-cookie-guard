@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Auth Cookie Guard",
+    "description": "Clears the port-bound login cookies left behind by every desktop launch, so repeated restarts can never grow the Cookie header past the server limit."
+  }
+}

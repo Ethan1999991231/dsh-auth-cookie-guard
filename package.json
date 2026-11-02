@@ -1,0 +1,44 @@
+{
+  "name": "dsh-auth-cookie-guard",
+  "version": "1.0.0",
+  "description": "Reap the port-bound dsh-auth browser cookies that pile up on every DeepSeek Harness desktop launch, and heal a jar that already overflowed the HTTP header limit.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./index.js",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "cookie",
+    "auth",
+    "cookie-jar"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "node test/guard.test.mjs",
+    "check": "node --check index.js",
+    "build": "node build.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

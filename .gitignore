@@ -1,0 +1,14 @@
+node_modules/
+release/
+*.tgz
+*.zip
+
+# editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# logs
+*.log
+npm-debug.log*

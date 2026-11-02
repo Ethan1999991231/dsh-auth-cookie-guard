@@ -1,0 +1,9 @@
+# dsh-auth-cookie-guard — bundle patch.
+#
+# One Host row. It injects the `connection` and `webServer` services, reaps the
+# stale `dsh-auth-*` cookies on every authorized response, and answers
+# HPE_HEADER_OVERFLOW with a cookie-expiring redirect.
+- insert:
+    - id: dsh-auth-cookie-guard
+      name: 'dsh-auth-cookie-guard'
+      config: {}
