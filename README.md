@@ -76,23 +76,36 @@ npm run check   # node --check index.js
 ```
 
 测试不依赖任何 npm 包，也不读写真实 cookie jar（全部用伪造的 `dsh-auth-*` 名字）。
+tarball 里也带了这套测试，所以拿到包的人可以直接验证：
+
+```bash
+tar -xzf dsh-auth-cookie-guard-1.0.0.tgz && cd package && node test/guard.test.mjs
+```
 
 ## 构建发布
 
 ```bash
-node build.mjs --owner 你的GitHub用户名
+node build.mjs --git                # 产出 release/ 三项，并给 release 树建好首个提交
+node build.mjs --owner 你的GitHub用户名   # 额外写入 repository/homepage/bugs
 ```
 
 产出 `release/` 下三样东西：
 
 | 产物 | 用途 |
 | --- | --- |
-| `dsh-auth-cookie-guard/` | 干净的 git-ready 目录树，推 GitHub 用 |
+| `dsh-auth-cookie-guard/` | 干净的 git-ready 目录树（`--git` 时已初始化并提交），推 GitHub 用 |
 | `dsh-auth-cookie-guard-1.0.0.tgz` | npm 包，`dsh plugin add` / `npm i` 用 |
 | `dsh-auth-cookie-guard-1.0.0-source.zip` | 同一棵树的压缩包，直接上传 GitHub |
 | `SHA256SUMS.txt` | 两个压缩包的校验和 |
 
 `--owner` 会写入 `repository` / `homepage` / `bugs` 三个字段；不传则省略它们（npm 允许，可以直接 `npm publish`）。
+重复执行 `build.mjs` 会重建 `release/`，但里面已有的 `.git` 会被保留（先挪到同盘暂存目录再挪回），
+所以可以「改代码 → 重新 build → 继续提交」，历史不会丢。
+
+两条 GitHub Actions 都在仓库里：
+
+- `.github/workflows/ci.yml` — 每次 push / PR 在 Node 20、22、24 上跑 `node --check` 与 `npm test`。
+- `.github/workflows/release.yml` — 推 `v*` tag 时重新构建，并把 tgz、源码 zip、`SHA256SUMS.txt` 附到 GitHub Release。
 
 > 仓库里的 `package.json` 用 `@local/dsh-auth-cookie-guard` 这个名字，是为了能在本地 profile 里
 > 以 `link:` 方式装上、同时不和已发布的 npm 包名冲突。`build.mjs` 会把包名、以及 `cordis.patch.yml`
@@ -107,7 +120,9 @@ locale/{en,zh}.json      插件管理页标题与说明
 icon.svg                 插件图标
 test/guard.test.mjs      回归测试（零依赖）
 build.mjs                发布构建脚本
-.github/workflows/ci.yml Node 20/22/24 上跑语法检查与测试
+.github/workflows/ci.yml     Node 20/22/24 上跑语法检查与测试
+.github/workflows/release.yml 推 tag 时构建并附产物到 Release
+.gitattributes           统一 LF 行尾
 ```
 
 ## 说明

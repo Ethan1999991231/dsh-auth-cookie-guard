@@ -47,6 +47,7 @@ const TREE = [
   'LICENSE',
   'CHANGELOG.md',
   '.gitignore',
+  '.gitattributes',
   'build.mjs',
   'test/guard.test.mjs',
   '.github/workflows/ci.yml',
