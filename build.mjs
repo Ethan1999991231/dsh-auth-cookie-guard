@@ -50,6 +50,7 @@ const TREE = [
   'build.mjs',
   'test/guard.test.mjs',
   '.github/workflows/ci.yml',
+  '.github/workflows/release.yml',
   'locale',
 ]
 
@@ -128,6 +129,8 @@ const PACKED = [
   'README.md',
   'LICENSE',
   'CHANGELOG.md',
+  'build.mjs',
+  'test',
   'locale',
 ]
 const stageDir = join(outDir, '.pack')

@@ -1,0 +1,37 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify
+        run: |
+          node --check index.js
+          node test/guard.test.mjs
+
+      - name: Build artifacts
+        run: node build.mjs
+
+      - name: Upload artifacts to the release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.tgz
+            release/*-source.zip
+            release/SHA256SUMS.txt

@@ -29,7 +29,9 @@
     "icon.svg",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "build.mjs",
+    "test/guard.test.mjs"
   ],
   "scripts": {
     "test": "node test/guard.test.mjs",
