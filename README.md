@@ -130,5 +130,8 @@ build.mjs                发布构建脚本
 - 这不是 DeepSeek Harness 官方代码；官方修复方向应是「启动时清理与本实例 authority 不一致的
   `dsh-auth-*` Cookie」，或把 cookie 名字里的端口去掉（cookie 本就不区分端口）。
 - 插件只操作 `dsh-auth-` 前缀、且出现在当前请求 `Cookie` 头里的名字，不读凭据文件、不联网。
+- 同一 profile 里**不要同时装**本地 link 版（`@local/dsh-auth-cookie-guard`）和发布版
+  （`dsh-auth-cookie-guard`）：两者的 loader 行 id 相同，会触发 duplicate loader entry id 导致启动失败。
+  要切到发布版就先删掉本地版，反之亦然。
 
 MIT License.
