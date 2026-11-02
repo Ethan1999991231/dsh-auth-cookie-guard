@@ -33,7 +33,6 @@ import {
   statSync,
   writeFileSync,
 } from 'node:fs'
-import { tmpdir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -89,9 +88,13 @@ const treeDir = join(outDir, options.name)
 
 // A rebuild replaces the whole release directory; keep a repository that already
 // lives inside the release tree (so `--git` users can rebuild without losing history).
+// The stash stays on the same volume — rename(2) is not cross-device.
 const releaseGit = join(treeDir, '.git')
-const stash = existsSync(releaseGit) ? join(tmpdir(), `dsh-guard-git-${process.pid}-${Date.now()}`) : undefined
-if (stash !== undefined) renameSync(releaseGit, stash)
+const stash = existsSync(releaseGit) ? join(root, '.git-stash') : undefined
+if (stash !== undefined) {
+  rmSync(stash, { recursive: true, force: true })
+  renameSync(releaseGit, stash)
+}
 
 rmSync(outDir, { recursive: true, force: true })
 mkdirSync(outDir, { recursive: true })
@@ -146,10 +149,15 @@ if (stash !== undefined) {
 }
 if (options.git) {
   execFileSync('git', ['add', '-A'], { cwd: treeDir, stdio: 'inherit' })
-  execFileSync('git', ['commit', '-m', `release v${published.version}`, '--allow-empty'], {
-    cwd: treeDir,
-    stdio: 'inherit',
-  })
+  let dirty = false
+  try {
+    execFileSync('git', ['diff', '--cached', '--quiet'], { cwd: treeDir, stdio: 'ignore' })
+  } catch {
+    dirty = true
+  }
+  if (dirty) {
+    execFileSync('git', ['commit', '-m', `release v${published.version}`], { cwd: treeDir, stdio: 'inherit' })
+  }
 }
 const hasGit = existsSync(join(treeDir, '.git'))
 
