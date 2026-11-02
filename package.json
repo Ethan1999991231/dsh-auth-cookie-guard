@@ -42,5 +42,13 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ethan1999991231/dsh-auth-cookie-guard.git"
+  },
+  "homepage": "https://github.com/Ethan1999991231/dsh-auth-cookie-guard#readme",
+  "bugs": {
+    "url": "https://github.com/Ethan1999991231/dsh-auth-cookie-guard/issues"
   }
 }
